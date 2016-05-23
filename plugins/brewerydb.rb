@@ -1,7 +1,6 @@
 require 'net/http'
 require 'json'
 
-
 class Cinch::BreweryDB
   include Cinch::Plugin
 
@@ -13,8 +12,8 @@ class Cinch::BreweryDB
   end
 
   def search(beer_name)
-    url = "#{@brewerydb_api_url}/?key=#{@brewerydb_api_key}&format=JSON&name=#{beer_name}&withBreweries=y"
-    uri = URI(url)
+    url = "#{@brewerydb_api_url}/?name=#{beer_name}&withBreweries=y&key=#{@brewerydb_api_key}&format=json"
+    uri = URI(URI.escape(url))
     response = Net::HTTP.get(uri)
     beer_info = JSON.parse(response)
 
@@ -28,9 +27,9 @@ class Cinch::BreweryDB
     @beer_style = beer_info["data"][0]["style"]["shortName"]
   end
 
-  match /beer (.+)/
+  match /beer (.*)/
   def execute(m, query)
-    search(query)
+    beer = search(query)
     m.reply "#{@beer_name} by #{@beer_brewery} (#{@beer_city}, #{@beer_state})"
     m.reply "#{@beer_style} - #{@beer_abv}% ABV - #{@beer_ibu} IBU 🍻"
   rescue
