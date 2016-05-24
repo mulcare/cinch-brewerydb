@@ -53,11 +53,11 @@ class Cinch::BreweryDB
 
   def setup(*)
     @brewerydb_api_key = config[:brewerydb_api_key]
-    @brewerydb_api_url = "http://api.brewerydb.com/v2/beers"
+    @brewerydb_api_url = "http://api.brewerydb.com/v2/search"
   end
 
   def search(beer_name)
-    url = "#{@brewerydb_api_url}/?name=#{beer_name}&withBreweries=y&key=#{@brewerydb_api_key}&format=json"
+    url = "#{@brewerydb_api_url}/?q=#{beer_name}&type=beer&withBreweries=y&key=#{@brewerydb_api_key}&format=json"
     uri = URI(URI.escape(url))
     response = Net::HTTP.get(uri)
     beer_info = JSON.parse(response)
