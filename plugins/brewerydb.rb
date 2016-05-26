@@ -78,7 +78,7 @@ class Cinch::BreweryDB
   match /beer (.*)/
   def execute(m, query)
     beer = search(query)
-    m.reply "#{Format(:12, @beer_name)} by #{@beer_brewery} (#{@beer_city}, #{@beer_state})"
+    m.reply "#{Format(:red, @beer_name)} by #{@beer_brewery} (#{@beer_city}, #{@beer_state})"
     m.reply "#{@beer_style} - #{@beer_abv}% ABV - #{@beer_ibu} IBU 🍻"
   rescue
     m.reply "\"#{query}\" not found. Try full name of beer."
