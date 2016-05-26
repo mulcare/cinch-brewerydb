@@ -69,6 +69,9 @@ class Cinch::BreweryDB
     @beer_state = beer_info["data"][0]["breweries"][0]["locations"][0]["region"]
     @beer_abv = beer_info["data"][0]["abv"]
     @beer_ibu = beer_info["data"][0]["ibu"]
+    if @beer_ibu.nil?
+      @beer_ibu = 0
+    end
     @beer_style = beer_info["data"][0]["style"]["shortName"]
   end
 
