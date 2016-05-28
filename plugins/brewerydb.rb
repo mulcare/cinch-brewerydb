@@ -69,6 +69,15 @@ class Cinch::BreweryDB
     @beer_state = beer_info["data"][0]["breweries"][0]["locations"][0]["region"]
     @beer_abv = beer_info["data"][0]["abv"]
     @beer_ibu = beer_info["data"][0]["ibu"]
+    # IBU should be color coded to reflect bitterness
+    if @beer_ibu.between?(1, 20)
+      @beer_ibu = Format(:lime, @beer_ibu)
+    elseif @beer_ibu.between?(21,40)
+      @beer_ibu = Format(:yellow, @beer_ibu)
+    elseif
+      @beer_ibu = Format(:red, @beer_ibu)
+    end
+    # Lagers, etc. will return nil for IBU
     if @beer_ibu.nil?
       @beer_ibu = 0
     end
@@ -78,7 +87,7 @@ class Cinch::BreweryDB
   match /beer (.*)/
   def execute(m, query)
     beer = search(query)
-    m.reply "#{Format(:red, @beer_name)} by #{@beer_brewery} (#{@beer_city}, #{@beer_state})"
+    m.reply "#{Format(:bold, @beer_name)} by #{Format(:bold, @beer_brewery)} (#{@beer_city}, #{@beer_state})"
     m.reply "#{@beer_style} - #{@beer_abv}% ABV - #{@beer_ibu} IBU 🍻"
   rescue
     m.reply "\"#{query}\" not found. Try full name of beer."
