@@ -77,7 +77,7 @@ class Cinch::BreweryDB
     beer = search(query)
     m.reply "#{Format(:bold, @beer_name)} by #{Format(:bold, @beer_brewery)} (#{@beer_city}, #{@beer_state})"
     m.reply "#{@beer_style} - #{@beer_abv}% ABV - #{@beer_ibu} IBU 🍻"
-#  rescue
-#    m.reply "\"#{query}\" not found. Try full name of beer."
+  rescue
+    m.reply "\"#{query}\" not found. Try full name of beer."
   end
 end
