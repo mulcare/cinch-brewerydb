@@ -62,25 +62,26 @@ class Cinch::BreweryDB
     response = Net::HTTP.get(uri)
     beer_info = JSON.parse(response)
 
-    # Set useful variables from the JSON response
-    @beer_name = beer_info["data"][0]["name"]
-    @beer_brewery = beer_info["data"][0]["breweries"][0]["name"]
-    @beer_city = beer_info["data"][0]["breweries"][0]["locations"][0]["locality"]
-    @beer_state = beer_info["data"][0]["breweries"][0]["locations"][0]["region"]
-    @beer_abv = beer_info["data"][0]["abv"]
-    @beer_ibu = beer_info["data"][0]["ibu"]
-    if @beer_ibu.nil?
-      @beer_ibu = 0
+    @beer = {
+      name: beer_info["data"][0]["name"]
+      brewery: beer_info["data"][0]["breweries"][0]["name"]
+      city: beer_info["data"][0]["breweries"][0]["locations"][0]["locality"]
+      state: beer_info["data"][0]["breweries"][0]["locations"][0]["region"]
+      abv: beer_info["data"][0]["abv"]
+      ibu: beer_info["data"][0]["ibu"]
+      style: beer_info["data"][0]["style"]["shortName"]
+    }
+    if @beer[:ibu].nil?
+      @beer[:ibu] = 0
     end
-    @beer_style = beer_info["data"][0]["style"]["shortName"]
   end
 
   match /beer (.*)/
   def execute(m, query)
     beer = search(query)
-    m.reply "#{Format(:bold, @beer_name)} by #{Format(:bold, @beer_brewery)} (#{@beer_city}, #{@beer_state})"
-    sleep(1)
-    m.reply "#{@beer_style} - #{@beer_abv}% ABV - #{@beer_ibu} IBU 🍻"
+    m.reply "#{Format(:bold, @beer[:name])} by #{Format(:bold, @beer[:brewery])} (#{@beer[:city]}, #{@beer[:state]})"
+    sleep(1) # Brief sleep required as workaround for Cinch message queue race condition issue
+    m.reply "#{@beer[:style]} - #{@beer[:abv]}% ABV - #{@beer[:ibu]} IBU 🍻"
   rescue
     m.reply "\"#{query}\" not found. Try full name of beer."
   end
