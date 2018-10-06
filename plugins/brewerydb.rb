@@ -63,12 +63,12 @@ class Cinch::BreweryDB
     beer_info = JSON.parse(response)
 
     @beer = {
-      name: beer_info["data"][0]["name"]
-      brewery: beer_info["data"][0]["breweries"][0]["name"]
-      city: beer_info["data"][0]["breweries"][0]["locations"][0]["locality"]
-      state: beer_info["data"][0]["breweries"][0]["locations"][0]["region"]
-      abv: beer_info["data"][0]["abv"]
-      ibu: beer_info["data"][0]["ibu"]
+      name: beer_info["data"][0]["name"],
+      brewery: beer_info["data"][0]["breweries"][0]["name"],
+      city: beer_info["data"][0]["breweries"][0]["locations"][0]["locality"],
+      state: beer_info["data"][0]["breweries"][0]["locations"][0]["region"],
+      abv: beer_info["data"][0]["abv"],
+      ibu: beer_info["data"][0]["ibu"],
       style: beer_info["data"][0]["style"]["shortName"]
     }
     if @beer[:ibu].nil?
